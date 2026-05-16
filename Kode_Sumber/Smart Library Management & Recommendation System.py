@@ -14,6 +14,7 @@ class Buku:
     pengarang: str
     kategori: str
     status: int = 0 # 0=TERSEDIA, 1=DIPINJAM, 2=DIPESAN
+    pinjam_count: int = 0
 
 @dataclass
 class Peminjaman:
@@ -62,6 +63,27 @@ class Queue:
     def __len__(self):
         return self._size
 
+    def delete_by_value(self, x):
+        """Big-O: O(n)"""
+        if self.head is None:
+            return False
+        if self.head.data == x:
+            self.head = self.head.next
+            if self.head is None:
+                self.tail = None
+            self._size -= 1
+            return True
+        prev = self.head
+        cur = self.head.next
+        while cur:
+            if cur.data == x:
+                prev.next = cur.next
+                if cur.next is None:
+                    self.tail = prev
+                self._size -= 1
+                return True
+            prev, cur = cur, cur.next
+        return False
 class Stack:
     def __init__(self):
         self.top = None
@@ -88,6 +110,14 @@ class Stack:
 
     def is_empty(self):
         return self._size == 0
+
+    def to_list(self):
+        res = []
+        curr = self.top
+        while curr:
+            res.append(curr.data)
+            curr = curr.next
+        return res
 
 class BSTNode:
     def __init__(self, buku):
