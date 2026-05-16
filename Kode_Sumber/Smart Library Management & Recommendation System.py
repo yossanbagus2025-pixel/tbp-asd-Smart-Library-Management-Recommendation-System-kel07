@@ -376,6 +376,86 @@ def main():
             else:
                 print("Buku tidak ditemukan")
             print("[Big-O: O(log n)]")
+        elif perintah == "PINJAM":
+            if len(cmd) != 3:
+                print("Format: PINJAM <anggota_id> <isbn>")
+                continue
+            anggota_id = cmd[1]
+            isbn = cmd[2]
+            buku = bst.search(isbn)
+            if buku is None:
+                print("Buku tidak ditemukan")
+                continue
+            if buku.status != STATUS["TERSEDIA"]:
+                print("Buku tidak tersedia")
+                continue
+            tx_counter += 1
+            buku.pinjam_count += 1
+            transaksi = Peminjaman(tx_counter, anggota_id, isbn, time.time())
+            riwayat_global.push(("PINJAM", transaksi))
+            peminjaman_aktif[isbn] = transaksi
+            if anggota_id not in riwayat_user:
+                riwayat_user[anggota_id] = []
+            for buku_lama in riwayat_user[anggota_id]:
+                graf_rek.add_copinjam(buku_lama, isbn)
+            riwayat_user[anggota_id].append(isbn)
+            bst.update_status(isbn, STATUS["DIPINJAM"])
+            print(f"Buku {isbn} berhasil dipinjam")
+            print("[Big-O: O(log n)]")
+        elif perintah == "KEMBALIKAN":
+            if len(cmd) != 2:
+                print("Format: KEMBALIKAN <isbn>")
+                continue
+            isbn = cmd[1]
+            buku = bst.search(isbn)
+            if buku is None:
+                print("Buku tidak ditemukan")
+                continue
+            if isbn in peminjaman_aktif:
+                del peminjaman_aktif[isbn]
+            if isbn in antrian_pesan and not antrian_pesan[isbn].is_empty():
+                next_anggota_id = antrian_pesan[isbn].dequeue()
+                if antrian_pesan[isbn].is_empty():
+                    bst.update_status(isbn, STATUS["TERSEDIA"])
+                else:
+                    bst.update_status(isbn, STATUS["DIPESAN"])
+                print(f"Buku {isbn} dialihkan ke antrian {next_anggota_id}")
+            else:
+                bst.update_status(isbn, STATUS["TERSEDIA"])
+                print(f"Buku {isbn} dikembalikan")
+            print("[Big-O: O(log n)]")
+        elif perintah == "PESAN":
+            if len(cmd) != 3:
+                print("Format: PESAN <anggota_id> <isbn>")
+                continue
+            anggota_id = cmd[1]
+            isbn = cmd[2]
+            buku = bst.search(isbn)
+            if buku is None:
+                print("Buku tidak ditemukan")
+            elif buku.status == STATUS["TERSEDIA"]:
+                print("Buku masih tersedia, gunakan PINJAM")
+            else:
+                if isbn not in antrian_pesan:
+                    antrian_pesan[isbn] = Queue()
+                antrian_pesan[isbn].enqueue(anggota_id)
+                bst.update_status(isbn, STATUS["DIPESAN"])
+                print(f"{anggota_id} masuk antrian buku {isbn}")
+            print("[Big-O: O(log n)]")
+        elif perintah == "ANTRIAN":
+            if len(cmd) != 2:
+                print("Format: ANTRIAN <isbn>")
+                continue
+            isbn = cmd[1]
+            if isbn not in antrian_pesan or antrian_pesan[isbn].is_empty():
+                print("Tidak ada antrian")
+            else:
+                current = antrian_pesan[isbn].head
+                print(f"Antrian buku {isbn}:")
+                while current:
+                    print(f"  - {current.data}")
+                    current = current.next
+            print("[Big-O: O(n)]")
 
 def main():
     bst = BSTKatalog()
