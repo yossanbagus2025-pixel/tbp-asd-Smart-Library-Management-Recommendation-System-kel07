@@ -264,6 +264,118 @@ def generate_koleksi(n=80):
     return [Buku(f'ISBN-{i:04d}', f'{random.choice(kata)} Vol.{i}',
         f'Penulis-{random.randint(1,20)}', random.choice(KATEGORI))
         for i in range(1, n+1)]
+def shell_sort_durasi(arr):
+    n = len(arr)
+    gap = n // 2
+    while gap > 0:
+        for i in range(gap, n):
+            temp = arr[i]
+            j = i
+            while j >= gap and arr[j - gap].durasi_hari < temp.durasi_hari:
+                arr[j] = arr[j - gap]
+                j -= gap
+            arr[j] = temp
+        gap //= 2
+    return arr
+
+
+# --- MERGE SORT (FREKUENSI) ---
+def merge_sort_frekuensi(arr):
+    if len(arr) <= 1:
+        return arr
+    mid = len(arr) // 2
+    left = merge_sort_frekuensi(arr[:mid])
+    right = merge_sort_frekuensi(arr[mid:])
+    return merge(left, right)
+
+
+def merge(left, right):
+    res = []
+    while left and right:
+        if left[0].pinjam_count >= right[0].pinjam_count:
+            res.append(left.pop(0))
+        else:
+            res.append(right.pop(0))
+    return res + left + right
+
+
+def generate_koleksi(n=80):
+    kata = [
+        "Algoritma",
+        "Jaringan",
+        "Python",
+        "Data",
+        "Digital",
+        "Sistem",
+        "Kontrol",
+        "Sinyal",
+        "Elektronika",
+        "Fisika",
+    ]
+    return [
+        Buku(
+            f"ISBN-{i:04d}",
+            f"{random.choice(kata)} Vol.{i}",
+            f"Penulis-{random.randint(1,20)}",
+            random.choice(KATEGORI),
+        )
+        for i in range(1, n + 1)
+    ]
+
+
+def main():
+    bst = BSTKatalog()
+    antrian_pesan = {}  # isbn -> Queue
+    riwayat_global = Stack()
+    graf_rek = GraphRekBuku()
+    tx_counter = 0
+    riwayat_user = {}
+    peminjaman_aktif = {}
+    for buku in generate_koleksi(80):
+        bst.insert(buku)
+    print("Smart Library System Ketik BANTUAN untuk daftar perintah")
+    while True:
+        cmd = input("\n>>> ").strip().split()
+        if len(cmd) == 0:
+            continue
+        perintah = cmd[0].upper()
+        if perintah == "BANTUAN":
+            print("\nDAFTAR PERINTAH:")
+            print("  CARI_BUKU <isbn>")
+            print("  PINJAM <anggota_id> <isbn>")
+            print("  KEMBALIKAN <isbn>")
+            print("  PESAN <anggota_id> <isbn>")
+            print("  BATALKAN_TERAKHIR")
+            print("  REKOMENDASI <isbn>")
+            print("  KATALOG")
+            print("  ANTRIAN <isbn>")
+            print("  BATALKAN_PESANAN <anggota_id> <isbn>")
+            print("  HAPUS_RUSAK <isbn>")
+            print("  LAPORAN_BULAN")
+            print("  KELUAR")
+        elif perintah == "CARI_BUKU":
+            if len(cmd) != 2:
+                print("Format: CARI_BUKU <isbn>")
+                continue
+            isbn = cmd[1]
+            buku = bst.search(isbn)
+            if buku:
+                print(f"\nISBN       : {buku.isbn}")
+                print(f"Judul      : {buku.judul}")
+                print(f"Pengarang  : {buku.pengarang}")
+                print(f"Kategori   : {buku.kategori}")
+                print(f"Status     : {buku.status}")
+                if isbn in peminjaman_aktif:
+                    trx = peminjaman_aktif[isbn]
+                    print(f"Peminjam   : {trx.anggota_id}")
+                    waktu = time.strftime(
+                        "%d-%m-%Y %H:%M:%S", time.localtime(trx.tgl_pinjam)
+                    )
+                    print(f"Tgl Pinjam : {waktu}")
+                    print(f"Durasi     : {trx.durasi_hari} hari")
+            else:
+                print("Buku tidak ditemukan")
+            print("[Big-O: O(log n)]")
 
 def main():
     bst = BSTKatalog()
