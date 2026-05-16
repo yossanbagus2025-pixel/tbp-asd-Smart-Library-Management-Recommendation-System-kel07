@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# =====================================================================
+# TAMBAHAN KHUSUS UNTUK TBP ALGORITMA DAN STRUKTUR DATA
+# =====================================================================
+
+# Memastikan folder konfigurasi IDE lokal tidak ikut terunggah ke repo global
+.vscode/
+.idea/
+*.swp
+
+# Mengabaikan metadata sistem operasi agar tidak mengotori repositori kelompok
+.DS_Store
+Thumbs.db
