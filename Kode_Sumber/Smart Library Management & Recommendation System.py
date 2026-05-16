@@ -48,7 +48,7 @@ class Queue:
     def dequeue(self):
         """Big-O: O(1)."""
         if self.is_empty():
-            raise ValueError
+            raise TypeError("Data Kosong")
         removed = self.head.data
         self.head = self.head.next
         self._size -= 1
@@ -58,7 +58,7 @@ class Queue:
 
     def is_empty(self):
         return self._size == 0
-    
+
     def __len__(self):
         return self._size
 
@@ -77,7 +77,7 @@ class Stack:
     def pop(self):
         """Big-O: O(1)."""
         if self.is_empty():
-            raise ValueError
+            raise TypeError("Data Kosong")
         removed = self.top.data
         self.top = self.top.next
         self._size -= 1
