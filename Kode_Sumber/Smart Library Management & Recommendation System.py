@@ -522,19 +522,32 @@ def main():
 
             print(f"\n=== LAPORAN BULANAN (N Riwayat={len(data_peminjaman)}) ===")
 
-def main():
-    bst = BSTKatalog()
-    antrian_pesan = {} # isbn -> Queue
-    riwayat_global = Stack()
-    graf_rek = GraphRekBuku()
-    tx_counter = 0
-    for buku in generate_koleksi(80):
-        bst.insert(buku)
-    antrian_pesan[buku.isbn] = Queue()
-    print('Smart Library System Ketik BANTUAN untuk daftar perintah')
-# TODO: implementasikan loop CLI
-# Perintah: CARI_BUKU <isbn>, PINJAM <nim> <isbn>, KEMBALIKAN <isbn>
-# PESAN <nim> <isbn>, BATALKAN_TERAKHIR, REKOMENDASI <isbn>
-# KATALOG, ANTRIAN <isbn>, LAPORAN_BULAN, KELUAR
-if __name__ == '__main__':
+            # --- (a) Uji Shell Sort (Durasi) ---
+            t_start = time.time()
+            res_shell = shell_sort_durasi(data_peminjaman[:])
+            t_shell = time.time() - t_start
+            print(f"\n[Shell Sort - Durasi Descending] Runtime: {t_shell:.6f}s")
+            for p in res_shell[:5]:
+                print(f"ID: {p.transaksi_id} | Durasi: {p.durasi_hari} hari")
+
+            # --- (b) Uji Merge Sort (Frekuensi) ---
+            t_start = time.time()
+            res_merge = merge_sort_frekuensi(data_buku[:])
+            t_merge = time.time() - t_start
+            print(f"\n[Merge Sort - Frekuensi Descending] Runtime: {t_merge:.6f}s")
+            for b in res_merge[:5]:
+                print(f"{b.judul} | Dipinjam: {b.pinjam_count}x")
+
+            print(f"\nPerbandingan Runtime (N={len(data_buku)}):")
+            print(f"Shell Sort: {t_shell:.6f}s vs Merge Sort: {t_merge:.6f}s")
+            print("[Big-O: Shell ~O(n^1.5), Merge O(n log n)]")
+        elif perintah == "KELUAR":
+            print("Program selesai")
+            break
+        else:
+            print("Perintah tidak dikenali")
+
+
+if __name__ == "__main__":
     main()
+
