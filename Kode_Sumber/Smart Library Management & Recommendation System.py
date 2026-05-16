@@ -488,6 +488,39 @@ def main():
                         del peminjaman_aktif[data.isbn]
                     print(f"Undo: Transaksi {data.transaksi_id} dibatalkan")
             print("[Big-O: O(log n)]")
+        elif perintah == "BATALKAN_PESANAN":
+            if len(cmd) != 3:
+                print("Format: BATALKAN_PESANAN <anggota_id> <isbn>")
+                continue
+            aid, isbn = cmd[1], cmd[2]
+            if isbn in antrian_pesan and antrian_pesan[isbn].delete_by_value(aid):
+                print(f"Pesanan {aid} untuk buku {isbn} berhasil dibatalkan.")
+            else:
+                print("Data pesanan tidak ditemukan.")
+            print("[Big-O: O(n)]")
+        elif perintah == "HAPUS_RUSAK":
+            if len(cmd) != 2:
+                print("Format: HAPUS_RUSAK <isbn>")
+                continue
+            isbn = cmd[1]
+            buku_target = bst.search(isbn)
+            if buku_target:
+                riwayat_global.push(("HAPUS", buku_target))
+                bst.delete(isbn)
+                print(f"Buku {isbn} berhasil dihapus dari katalog (Rusak).")
+            else:
+                print("Buku tidak ditemukan.")
+            print("[Big-O: O(log n)]")
+        elif perintah == "LAPORAN_BULAN":
+            # 1. Siapkan data dari Katalog (untuk Merge Sort)
+            data_buku = bst.inorder()
+
+            # 2. Siapkan data dari Riwayat (untuk Shell Sort)
+            # Kita filter hanya yang labelnya "PINJAM"
+            raw_riwayat = riwayat_global.to_list()
+            data_peminjaman = [item[1] for item in raw_riwayat if item[0] == "PINJAM"]
+
+            print(f"\n=== LAPORAN BULANAN (N Riwayat={len(data_peminjaman)}) ===")
 
 def main():
     bst = BSTKatalog()
