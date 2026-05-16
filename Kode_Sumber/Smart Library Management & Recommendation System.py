@@ -26,12 +26,14 @@ class Peminjaman:
 
 class LLNode:
     def __init__(self, data=None):
+        """Big-O: O(1)"""
         self.data = data
         self.next = None
 
 class Queue:
     """FIFO Queue untuk antrian pemesanan buku."""
     def __init__(self):
+        """Big-O: O(1)"""
         self.head = None
         self.tail = None
         self._size = 0
@@ -58,9 +60,11 @@ class Queue:
         return removed
 
     def is_empty(self):
+        """Big-O: O(1)"""
         return self._size == 0
 
     def __len__(self):
+        """Big-O: O(1)"""
         return self._size
 
     def delete_by_value(self, x):
@@ -86,6 +90,7 @@ class Queue:
         return False
 class Stack:
     def __init__(self):
+        """Big-O: O(1)"""
         self.top = None
         self._size = 0
 
@@ -106,12 +111,15 @@ class Stack:
         return removed
 
     def peek(self):
+        """Big-O: O(1)"""
         return self.top.data if self.top else None
 
     def is_empty(self):
+        """Big-O: O(1)"""
         return self._size == 0
 
     def to_list(self):
+        """Big-O: O(n)."""
         res = []
         curr = self.top
         while curr:
@@ -121,22 +129,31 @@ class Stack:
 
 class BSTNode:
     def __init__(self, buku):
+        """Big-O: O(1)"""
         self.buku = buku
         self.left = None
         self.right = None
 
 class BSTKatalog:
     def __init__(self):
+        """Big-O: O(1)"""
         self.root = None
 
     def insert(self, buku):
-        """Big-O: O(log n) rata-rata. Kunci = buku.isbn."""
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         if self.root is None:
             self.root = BSTNode(buku)
         else:
             return self.insert_recursive(self.root, buku)
 
     def insert_recursive(self, node, buku):
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         if buku.isbn < node.buku.isbn:
             if node.left is None:
                 node.left = BSTNode(buku)
@@ -149,6 +166,10 @@ class BSTKatalog:
                 return self.insert_recursive(node.right, buku)
 
     def search_node(self, isbn):
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         node = self.root
         while node:
             if isbn == node.buku.isbn:
@@ -160,10 +181,18 @@ class BSTKatalog:
         return None
 
     def search(self, isbn):
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         node = self.search_node(isbn)
         return node.buku if node else None
 
     def update_status(self, isbn, status):
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         node = self.search_node(isbn)
         if node is None:
             return False
@@ -171,11 +200,13 @@ class BSTKatalog:
         return True
 
     def inorder(self):
+        """Big-O: O(n)"""
         result = []
         self.inorder_recursive(self.root, result)
         return result
 
     def inorder_recursive(self, node, result):
+        """Big-O: O(n)"""
         if node is None:
             return
         self.inorder_recursive(node.left, result)
@@ -183,10 +214,17 @@ class BSTKatalog:
         self.inorder_recursive(node.right, result)
 
     def delete(self, key):
-        """Hapus buku dari BST berdasarkan ISBN"""
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         self.root = self._delete_recursive(self.root, key)
 
     def _delete_recursive(self, node, key):
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         if node is None:
             return None
         if key < node.buku.isbn:
@@ -207,20 +245,29 @@ class BSTKatalog:
         return node
 
     def _find_min(self, node):
+        """
+        Big-O Average: O(log n)
+        Big-O Worst  : O(n)
+        """
         while node.left:
             node = node.left
         return node
 
-
 class GraphRekBuku:
     def __init__(self):
+        """Big-O: O(1)"""
         self.adj = {}
 
     def add_vertex(self, isbn):
+        """Big-O: O(1)"""
         if isbn not in self.adj:
             self.adj[isbn] = []
 
     def add_copinjam(self, isbn_a, isbn_b):
+        """
+        Big-O: O(deg(v))
+        deg(v) = jumlah tetangga vertex
+        """
         self.add_vertex(isbn_a)
         self.add_vertex(isbn_b)
         found = False
@@ -241,6 +288,7 @@ class GraphRekBuku:
             self.adj[isbn_b].append((isbn_a, 1))
 
     def rekomendasikan(self, isbn, max_hop=2):
+        """Big-O: O(V + E)"""
         if isbn not in self.adj:
             return []
         visited = set([isbn])
@@ -258,13 +306,11 @@ class GraphRekBuku:
                     queue.enqueue((tetangga, hop + 1))
         return result
 
-def generate_koleksi(n=80):
-    kata = ['Algoritma','Jaringan','Python','Data','Digital',
-        'Sistem','Kontrol','Sinyal','Elektronika','Fisika']
-    return [Buku(f'ISBN-{i:04d}', f'{random.choice(kata)} Vol.{i}',
-        f'Penulis-{random.randint(1,20)}', random.choice(KATEGORI))
-        for i in range(1, n+1)]
 def shell_sort_durasi(arr):
+    """
+    Big-O Worst : O(n²)
+    Big-O Average: ~O(n^1.5)
+    """
     n = len(arr)
     gap = n // 2
     while gap > 0:
@@ -278,9 +324,8 @@ def shell_sort_durasi(arr):
         gap //= 2
     return arr
 
-
-# --- MERGE SORT (FREKUENSI) ---
 def merge_sort_frekuensi(arr):
+    """Big-O: O(n log n)"""
     if len(arr) <= 1:
         return arr
     mid = len(arr) // 2
@@ -288,8 +333,8 @@ def merge_sort_frekuensi(arr):
     right = merge_sort_frekuensi(arr[mid:])
     return merge(left, right)
 
-
 def merge(left, right):
+    """Big-O: O(n)"""
     res = []
     while left and right:
         if left[0].pinjam_count >= right[0].pinjam_count:
@@ -298,8 +343,8 @@ def merge(left, right):
             res.append(right.pop(0))
     return res + left + right
 
-
 def generate_koleksi(n=80):
+    """Big-O: O(n)"""
     kata = [
         "Algoritma",
         "Jaringan",
@@ -322,7 +367,6 @@ def generate_koleksi(n=80):
         for i in range(1, n + 1)
     ]
 
-
 def main():
     bst = BSTKatalog()
     antrian_pesan = {}  # isbn -> Queue
@@ -340,6 +384,7 @@ def main():
             continue
         perintah = cmd[0].upper()
         if perintah == "BANTUAN":
+            """Big-O: O(1)"""
             print("\nDAFTAR PERINTAH:")
             print("  CARI_BUKU <isbn>")
             print("  PINJAM <anggota_id> <isbn>")
@@ -354,6 +399,10 @@ def main():
             print("  LAPORAN_BULAN")
             print("  KELUAR")
         elif perintah == "CARI_BUKU":
+            """
+            Big-O Average: O(log n)
+            Big-O Worst  : O(n)
+            """
             if len(cmd) != 2:
                 print("Format: CARI_BUKU <isbn>")
                 continue
@@ -377,6 +426,10 @@ def main():
                 print("Buku tidak ditemukan")
             print("[Big-O: O(log n)]")
         elif perintah == "PINJAM":
+            """
+            Big-O Average: O(log n + k)
+            Big-O Worst  : O(n + k)
+            """
             if len(cmd) != 3:
                 print("Format: PINJAM <anggota_id> <isbn>")
                 continue
@@ -403,6 +456,10 @@ def main():
             print(f"Buku {isbn} berhasil dipinjam")
             print("[Big-O: O(log n)]")
         elif perintah == "KEMBALIKAN":
+            """
+            Big-O Average: O(log n)
+            Big-O Worst  : O(n)
+            """
             if len(cmd) != 2:
                 print("Format: KEMBALIKAN <isbn>")
                 continue
@@ -425,6 +482,10 @@ def main():
                 print(f"Buku {isbn} dikembalikan")
             print("[Big-O: O(log n)]")
         elif perintah == "PESAN":
+            """
+            Big-O Average: O(log n)
+            Big-O Worst  : O(n)
+            """
             if len(cmd) != 3:
                 print("Format: PESAN <anggota_id> <isbn>")
                 continue
@@ -443,6 +504,7 @@ def main():
                 print(f"{anggota_id} masuk antrian buku {isbn}")
             print("[Big-O: O(log n)]")
         elif perintah == "ANTRIAN":
+            """Big-O: O(n)"""
             if len(cmd) != 2:
                 print("Format: ANTRIAN <isbn>")
                 continue
@@ -457,6 +519,7 @@ def main():
                     current = current.next
             print("[Big-O: O(n)]")
         elif perintah == "REKOMENDASI":
+            """Big-O: O(V + E)"""
             if len(cmd) != 2:
                 print("Format: REKOMENDASI <isbn>")
                 continue
@@ -470,11 +533,16 @@ def main():
                     print(f"  {rekom} | freq={freq}")
             print("[Big-O: O(V + E)]")
         elif perintah == "KATALOG":
+            """Big-O: O(n)"""
             semua = bst.inorder()
             for buku in semua:
                 print(f"{buku.isbn} | {buku.judul} | {buku.kategori}")
             print("[Big-O: O(n)]")
         elif perintah == "BATALKAN_TERAKHIR":
+            """
+            Big-O Average: O(log n)
+            Big-O Worst  : O(n)
+            """
             if riwayat_global.is_empty():
                 print("Tidak ada transaksi")
             else:
@@ -489,6 +557,7 @@ def main():
                     print(f"Undo: Transaksi {data.transaksi_id} dibatalkan")
             print("[Big-O: O(log n)]")
         elif perintah == "BATALKAN_PESANAN":
+            """Big-O: O(n)"""
             if len(cmd) != 3:
                 print("Format: BATALKAN_PESANAN <anggota_id> <isbn>")
                 continue
@@ -499,6 +568,10 @@ def main():
                 print("Data pesanan tidak ditemukan.")
             print("[Big-O: O(n)]")
         elif perintah == "HAPUS_RUSAK":
+            """
+            Big-O Average: O(log n)
+            Big-O Worst  : O(n)
+            """
             if len(cmd) != 2:
                 print("Format: HAPUS_RUSAK <isbn>")
                 continue
@@ -512,17 +585,13 @@ def main():
                 print("Buku tidak ditemukan.")
             print("[Big-O: O(log n)]")
         elif perintah == "LAPORAN_BULAN":
-            # 1. Siapkan data dari Katalog (untuk Merge Sort)
+            """Big-O: O(n log n + n²)"""
             data_buku = bst.inorder()
-
-            # 2. Siapkan data dari Riwayat (untuk Shell Sort)
-            # Kita filter hanya yang labelnya "PINJAM"
             raw_riwayat = riwayat_global.to_list()
             data_peminjaman = [item[1] for item in raw_riwayat if item[0] == "PINJAM"]
-
             print(f"\n=== LAPORAN BULANAN (N Riwayat={len(data_peminjaman)}) ===")
 
-            # --- (a) Uji Shell Sort (Durasi) ---
+            # --- Uji Shell Sort (Durasi) ---
             t_start = time.time()
             res_shell = shell_sort_durasi(data_peminjaman[:])
             t_shell = time.time() - t_start
@@ -542,6 +611,7 @@ def main():
             print(f"Shell Sort: {t_shell:.6f}s vs Merge Sort: {t_merge:.6f}s")
             print("[Big-O: Shell ~O(n^1.5), Merge O(n log n)]")
         elif perintah == "KELUAR":
+            """Big-O: O(1)"""
             print("Program selesai")
             break
         else:
@@ -550,4 +620,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
