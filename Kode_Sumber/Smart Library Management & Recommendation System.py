@@ -456,6 +456,38 @@ def main():
                     print(f"  - {current.data}")
                     current = current.next
             print("[Big-O: O(n)]")
+        elif perintah == "REKOMENDASI":
+            if len(cmd) != 2:
+                print("Format: REKOMENDASI <isbn>")
+                continue
+            isbn = cmd[1]
+            hasil = graf_rek.rekomendasikan(isbn)
+            if len(hasil) == 0:
+                print("Tidak ada rekomendasi")
+            else:
+                print(f"Rekomendasi untuk {isbn}:")
+                for rekom, freq in hasil:
+                    print(f"  {rekom} | freq={freq}")
+            print("[Big-O: O(V + E)]")
+        elif perintah == "KATALOG":
+            semua = bst.inorder()
+            for buku in semua:
+                print(f"{buku.isbn} | {buku.judul} | {buku.kategori}")
+            print("[Big-O: O(n)]")
+        elif perintah == "BATALKAN_TERAKHIR":
+            if riwayat_global.is_empty():
+                print("Tidak ada transaksi")
+            else:
+                label, data = riwayat_global.pop()
+                if label == "HAPUS":
+                    bst.insert(data)
+                    print(f"Undo: Buku {data.isbn} dikembalikan ke katalog.")
+                elif label == "PINJAM":
+                    bst.update_status(data.isbn, STATUS["TERSEDIA"])
+                    if data.isbn in peminjaman_aktif:
+                        del peminjaman_aktif[data.isbn]
+                    print(f"Undo: Transaksi {data.transaksi_id} dibatalkan")
+            print("[Big-O: O(log n)]")
 
 def main():
     bst = BSTKatalog()
