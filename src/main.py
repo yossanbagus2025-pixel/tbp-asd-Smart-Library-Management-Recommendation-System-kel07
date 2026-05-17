@@ -248,7 +248,7 @@ def main():
             t_shell = time.time() - t_start
             print(f"\n[Shell Sort - Durasi Descending] Runtime: {t_shell:.6f}s")
             for p in res_shell[:5]:
-                print(f"ID: {p.transaksi_id} | Durasi: {p.durasi_hari} hari")
+                print(f"ID: {p.transaksi_id} | Durasi: {p.durasi_hari} hari | Anggota ID: {p.anggota_id} | ISBN: {p.isbn}")
 
             # --- (b) Uji Merge Sort (Frekuensi) ---
             t_start = time.time()
