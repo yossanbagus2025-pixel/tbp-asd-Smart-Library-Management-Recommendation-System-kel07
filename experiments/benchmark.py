@@ -70,7 +70,7 @@ print("Runtime:", end - start)
 
 print("\n=== Eksperimen 5: Merge Sort ===")
 
-buku_data = generate_koleksi(1000)
+buku_data = generate_koleksi(999)
 for buku in buku_data:
     buku.pinjam_count = random.randint(1, 100)
 start = time.time()
