@@ -8,8 +8,10 @@ current_file = Path(__file__).resolve()
 src_dir = current_file.parent.parent / "src"
 sys.path.append(str(src_dir))
 
-from modules.models import generate_koleksi, Peminjaman
-from modules.layanan_transaksi import shell_sort_durasi, merge_sort_frekuensi
+from modules.layanan_generator import generate_koleksi
+from modules.layanan_models import Peminjaman
+from modules.layanan_transaksi import shell_sort_durasi
+from modules.layanan_laporan import merge_sort_frekuensi
 from data_structures.bst import BSTKatalog
 from data_structures.queue_ll import Queue
 from data_structures.stack import Stack
