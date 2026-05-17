@@ -4,9 +4,8 @@ import unittest
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
-from modules.layanan_transaksi import shell_sort_durasi, merge_sort_frekuensi
-from modules.models import Buku, Peminjaman
-
+from modules.layanan_transaksi import shell_sort_durasi
+from modules.layanan_models import Peminjaman
 
 class TestLayananTransaksiModule(unittest.TestCase):
     def test_sorting_algorithms(self):

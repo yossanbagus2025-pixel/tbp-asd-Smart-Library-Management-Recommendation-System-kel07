@@ -6,9 +6,11 @@ import random
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from modules.models import STATUS, KATEGORI, Buku, Peminjaman, generate_koleksi
+from modules.layanan_models import STATUS, KATEGORI, Buku, Peminjaman
+from modules.layanan_generator import generate_koleksi
 from modules.layanan_katalog import LayananKatalog
-from modules.layanan_transaksi import shell_sort_durasi, merge_sort_frekuensi
+from modules.layanan_transaksi import shell_sort_durasi
+from modules.layanan_laporan import merge_sort_frekuensi
 from data_structures.queue_ll import Queue
 from data_structures.stack import Stack
 from data_structures.graph import GraphRekBuku
@@ -248,7 +250,7 @@ def main():
             t_shell = time.time() - t_start
             print(f"\n[Shell Sort - Durasi Descending] Runtime: {t_shell:.6f}s")
             for p in res_shell[:5]:
-                print(f"ID: {p.transaksi_id} | Durasi: {p.durasi_hari} hari")
+                print(f"ID: {p.transaksi_id} | Durasi: {p.durasi_hari} hari | ISBN: {p.isbn} | anggota ID: {p.anggota_id}")
 
             # --- (b) Uji Merge Sort (Frekuensi) ---
             t_start = time.time()
