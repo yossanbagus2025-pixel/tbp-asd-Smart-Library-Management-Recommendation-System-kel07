@@ -24,7 +24,7 @@ class Peminjaman:
     durasi_hari: int = 14
 
 
-def generate_koleksi(n=80):
+def generate_koleksi(n=100):
     """Big-O: O(n)"""
     kata = [
         "Algoritma",
